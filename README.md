@@ -3,6 +3,10 @@
 A [Vesktop](https://vesktop.dev) theme that follows your [Omarchy](https://omarchy.org)
 desktop. Switch your Omarchy theme and Vesktop recolors live, with no restart.
 
+![Vesktop on the dark Hackerman theme](images/hackerman.png)
+
+![Vesktop on the light Lupine theme](images/lupine.png)
+
 It restyles the app as a terminal session:
 
 - Rounded panes with titles in their borders, and the active pane in your accent
@@ -65,7 +69,7 @@ copies the result to Vesktop's themes folder, which Vesktop reloads live.
 
 ## Known limits
 
-- Tuned on dark themes. Light themes are untested.
+- Tuned mainly on dark themes. Lupine is the only light theme tested.
 - Settings pages keep larger text.
 - Rows in long lists stay tall, because Discord positions them with fixed heights.
 - Colors come from each theme's roles, so some themes suit it better than others.

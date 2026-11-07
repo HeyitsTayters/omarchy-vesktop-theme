@@ -125,6 +125,13 @@
   --button-filled-brand-background-hover: var(--om-accent) !important;
   --button-filled-brand-background-active: var(--om-accent) !important;
   --button-filled-brand-text: var(--om-bg) !important;
+  --redesign-button-secondary-text: var(--om-fg) !important;
+  --redesign-button-secondary-background: var(--om-raised) !important;
+  --redesign-button-secondary-pressed-background: var(--om-hover) !important;
+  --control-secondary-text-default: var(--om-fg) !important;
+  --control-secondary-text-hover: var(--om-fg) !important;
+  --control-secondary-background-default: var(--om-raised) !important;
+  --control-secondary-background-hover: var(--om-hover) !important;
   --redesign-button-primary-background: var(--om-accent) !important;
   --redesign-button-primary-pressed-background: var(--om-accent) !important;
   --redesign-button-primary-text: var(--om-bg) !important;
@@ -326,8 +333,8 @@ a[href="/quest-home"],
 .visual-refresh.theme-light {
   --om-gap: 8px;
   --om-label: {{ accent }};
-  --om-ok: {{ bright_green }};
-  --om-name: {{ bright_cyan }};
+  --om-ok: {{ mix bright_green foreground 45% }};
+  --om-name: {{ mix bright_cyan foreground 45% }};
   --om-section: {{ mix accent foreground 45% }};
   --om-pane: {{ background }};
   --chat-background-default: var(--om-pane) !important;
@@ -736,6 +743,34 @@ html {
   font-weight: 700 !important;
 }
 
+/* Discord shades the top of the list for its banners, dark on any theme */
+[class*="sidebarList"] header,
+[class*="sidebarList"] header::before,
+[class*="sidebarList"] header::after,
+[class*="sidebarList"] [class*="headerGlass"],
+[class*="sidebarList"] [class*="headerGradient"],
+[class*="sidebarList"] [class*="bannerVisible"],
+[class*="sidebarList"] [class*="header" i]:not(button),
+[class*="sidebarList"] [class*="header" i]:not(button)::before,
+[class*="sidebarList"] [class*="header" i]:not(button)::after,
+[class*="sidebarList"] nav > :first-child,
+[class*="sidebarList"] nav > :first-child::before,
+[class*="sidebarList"] nav > :first-child::after,
+[class*="sidebarList"] nav::before,
+[class*="sidebarList"] nav::after {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Filled buttons that aren't primary actions */
+button[class*="lookFilled"]:not([class*="colorBrand"]),
+button[class*="lookFilled"]:not([class*="colorBrand"]) *,
+button[data-mana-component="button"][class*="secondary" i],
+button[data-mana-component="button"][class*="secondary" i] * {
+  color: var(--om-fg) !important;
+}
+
 /* The server name is a header, not a section label */
 [class*="sidebarList"] header [aria-expanded],
 [class*="sidebarList"] header [aria-expanded] * {
@@ -754,8 +789,12 @@ html {
   filter: none !important;
 }
 
-[class*="messageListItem"] h3 [class*="username_"] {
+[class*="messageListItem"] [class*="username_"],
+[class*="messageListItem"] [class*="username_"] *,
+[class*="messageListItem"] [class*="headerText"] * {
   color: var(--om-name) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--om-name) !important;
 }
 
 [class*="messageListItem"] [class*="timestamp_"] {
