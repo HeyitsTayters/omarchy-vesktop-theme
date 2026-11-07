@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "dev.tayters.discord",
+  "name": "Discord",
+  "version": "1.0.0",
+  "author": "tayters",
+  "license": "MIT",
+  "description": "Opens or focuses Vesktop, dimmed while it isn't running.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Discord",
+    "description": "Opens or focuses Vesktop, dimmed while it isn't running.",
+    "category": "Apps",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
