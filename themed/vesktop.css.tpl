@@ -166,14 +166,16 @@
 /* Flat by default, so message rows and lists stay terminal-like. :where keeps
    this easy to override below. Avatars and status dots are masked shapes. */
 :where(*:not([class*="avatar"]):not([class*="Avatar"]):not([class*="status"]):not([class*="dot"])) {
+  corner-shape: var(--om-corner-shape, round);
   border-radius: 0 !important;
 }
 
-/* Corners follow Hyprland's rounding: full on floating surfaces, half on
-   small controls. */
+/* Follow the window geometry at a smaller scale inside the app. Shallow
+   chamfers keep narrow panes and small controls from turning into octagons. */
 :root {
-  --om-radius: __OMARCHY_RADIUS__px;
-  --om-radius-small: calc(__OMARCHY_RADIUS__px / 2);
+  --om-corner-shape: __OMARCHY_CORNER_SHAPE__;
+  --om-radius: calc(__OMARCHY_RADIUS__px * __OMARCHY_CORNER_SCALE__);
+  --om-radius-small: calc(var(--om-radius) / 3);
 }
 
 [class*="menu_"],
@@ -183,6 +185,7 @@
 [class*="embedWrapper"],
 [class*="userPopout"],
 [class*="biteSize"] {
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius) !important;
   overflow: hidden;
 }
@@ -203,6 +206,7 @@ textarea,
 [class*="childWrapper"],
 [class*="imageWrapper"],
 [class*="imageContainer"] {
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius-small) !important;
 }
 
@@ -374,18 +378,16 @@ a[href="/quest-home"],
   margin: 0 0 var(--om-gap) var(--om-gap) !important;
 }
 
-/* Colorful server icons step back until they're wanted */
-/* Icons keep their shape but only the theme's colors: a duotone from black to
-   the theme's bright green, and to its accent when hovered or selected. */
-[class*="guilds_"] foreignObject > *:not([class*="folderButtonInner"]) {
-  filter: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22o%22 color-interpolation-filters=%22sRGB%22%3E%3CfeGaussianBlur in=%22SourceGraphic%22 stdDeviation=%220.45%22 result=%22b%22/%3E%3CfeColorMatrix in=%22b%22 type=%22matrix%22 values=%220.3 0.59 0.11 0 0 0.3 0.59 0.11 0 0 0.3 0.59 0.11 0 0 0 0 0 1 0%22 result=%22g%22/%3E%3CfeComponentTransfer in=%22g%22 result=%22k%22%3E%3CfeFuncR type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3CfeFuncG type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3CfeFuncB type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color=%22%23{{ bright_green_strip }}%22 result=%22c%22/%3E%3CfeBlend in=%22k%22 in2=%22c%22 mode=%22multiply%22 result=%22t%22/%3E%3CfeComposite in=%22t%22 in2=%22SourceAlpha%22 operator=%22in%22/%3E%3C/filter%3E%3C/svg%3E#o");
-  transition: filter 120ms ease;
+/* Filter only icon images, never the foreignObject's interactive wrapper.
+   Keep the filter static: swapping SVG filter graphs on hover forces expensive
+   offscreen paints in Chromium, especially with expanded server folders. */
+[class*="guilds_"] [class*="icon_"] {
+  filter: grayscale(1);
 }
 
-/* One server at a time, never an open folder around others */
-[class*="guilds_"] [class*="listItem"]:not(:has([class*="listItem"])):not(:has([class*="folder" i])):hover foreignObject > *,
-[class*="guilds_"] [class*="listItem"]:not(:has([class*="listItem"])):not(:has([class*="folder" i])) [class*="selected"] foreignObject > * {
-  filter: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22o%22 color-interpolation-filters=%22sRGB%22%3E%3CfeGaussianBlur in=%22SourceGraphic%22 stdDeviation=%220.45%22 result=%22b%22/%3E%3CfeColorMatrix in=%22b%22 type=%22matrix%22 values=%220.3 0.59 0.11 0 0 0.3 0.59 0.11 0 0 0.3 0.59 0.11 0 0 0 0 0 1 0%22 result=%22g%22/%3E%3CfeComponentTransfer in=%22g%22 result=%22k%22%3E%3CfeFuncR type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3CfeFuncG type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3CfeFuncB type=%22table%22 tableValues=%220.03 0.5 0.86 1%22/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color=%22%23{{ accent_strip }}%22 result=%22c%22/%3E%3CfeBlend in=%22k%22 in2=%22c%22 mode=%22multiply%22 result=%22t%22/%3E%3CfeComposite in=%22t%22 in2=%22SourceAlpha%22 operator=%22in%22/%3E%3C/filter%3E%3C/svg%3E#o");
+/* Native backgrounds provide inexpensive hover and selection feedback. */
+[class*="guilds_"] [class*="childWrapper"]:hover {
+  background: var(--om-raised) !important;
 }
 
 /* Less noise */
@@ -555,13 +557,31 @@ html {
   border: 1px solid var(--om-line) !important;
 }
 
-/* AOE-style panes: rounded boxes, a title in the border, one active pane */
+/* AOE-style panes: framed boxes, a title in the border, one active pane */
 [class*="guilds_"],
 [class*="sidebarList"],
 [class*="page_"],
 [class*="panels_"] {
-  border-radius: var(--om-radius-small) !important;
+  corner-shape: var(--om-corner-shape, round);
+  border-radius: var(--om-radius) !important;
+  min-height: 0 !important;
   overflow: visible !important;
+}
+
+/* Clip the contents, leaving the pane's border titles outside the clip. Keep
+   flex children constrained so the member list cannot enlarge the viewport. */
+[class*="page_"] > *,
+[class*="sidebarList"] > *,
+[class*="guilds_"] > [role="tree"] {
+  corner-shape: var(--om-corner-shape, round);
+  border-radius: inherit !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+[class*="guilds_"] {
+  padding-block: var(--om-gap) !important;
 }
 
 [class*="page_"] {
@@ -569,14 +589,14 @@ html {
   position: relative !important;
 }
 
-/* The pane's contents paint over a real border's curve, so the visible border
-   is an overlay above them. */
+/* Borders and content use the same corner shape as the desktop window. */
 [class*="page_"]::before {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   z-index: 999;
   border: 1px solid var(--om-label);
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius);
   pointer-events: none;
 }
@@ -595,9 +615,10 @@ html {
 [class*="guilds_"]::before {
   content: "";
   position: absolute;
-  inset: -1px;
+  inset: 0;
   z-index: 999;
   border: 1px solid var(--om-line);
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius);
   pointer-events: none;
 }
@@ -606,7 +627,7 @@ html {
 [class*="sidebarList"]::after {
   position: absolute;
   top: -8px;
-  left: 12px;
+  left: max(12px, calc(var(--om-radius) + 4px));
   z-index: 1000;
   padding: 0 5px;
   background: var(--om-bg);
@@ -636,6 +657,7 @@ html {
 }
 
 [class*="panels_"] {
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius) !important;
   overflow: hidden !important;
 }
@@ -686,10 +708,12 @@ html {
   display: flex !important;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
   opacity: 1 !important;
   transform: none !important;
   background: color-mix(in srgb, var(--om-ok) 16%, transparent) !important;
   border: 0 !important;
+  corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius-small) !important;
 }
 
@@ -698,12 +722,12 @@ html {
 }
 
 [class*="guilds_"] [class*="folderIconWrapper"]::after {
-  content: "\f024b"; /* md-folder */
-  font-family: "__OMARCHY_FONT__", monospace;
-  font-size: 22px;
-  line-height: 1;
-  color: var(--om-ok);
-  transform: translate(-2px, 1px); /* the glyph's own spacing is uneven */
+  content: "";
+  width: 22px;
+  height: 22px;
+  background: var(--om-ok);
+  /* A vector mask keeps folders legible with any configured monospace font. */
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 [class*="guilds_"] [class*="folderButtonInner"],

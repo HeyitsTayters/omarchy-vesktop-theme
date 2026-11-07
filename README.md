@@ -9,11 +9,11 @@ desktop. Switch your Omarchy theme and Vesktop recolors live, with no restart.
 
 It restyles the app as a terminal session:
 
-- Rounded panes with titles in their borders, and the active pane in your accent
+- Framed panes with titles in their borders, and the active pane in your accent
 - Small monospace text, with IRC-style messages like `[18:02] <name> message`
   (best with Discord's Compact message display)
-- Server icons tinted with your theme's colors, and clean folder tiles
-- Corners that match your Hyprland `rounding`, and your Omarchy font
+- Grayscale server icons and clean folder tiles
+- Corners that follow Hyprland’s size and chamfered shape, and your Omarchy font
 - Promo banners, Nitro buttons and server banners hidden
 
 This is an unofficial community theme. It isn't affiliated with or endorsed by
