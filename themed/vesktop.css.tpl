@@ -328,7 +328,7 @@ a[href="/quest-home"],
   --om-label: {{ accent }};
   --om-ok: {{ bright_green }};
   --om-name: {{ bright_cyan }};
-  --om-section: {{ bright_yellow }};
+  --om-section: {{ mix accent foreground 45% }};
   --om-pane: {{ background }};
   --chat-background-default: var(--om-pane) !important;
   --background-base-low: var(--om-pane) !important;
@@ -654,9 +654,7 @@ html {
 }
 
 /* The list still leaves the banner's space at its top */
-[class*="sidebarList"]:has([class*="banner" i]) [class*="scroller"] > ul,
-[class*="sidebarList"]:has([class*="banner" i]) [class*="scroller"] > div > ul,
-[class*="sidebarList"]:has([class*="banner" i]) ul {
+[class*="sidebarList"]:has([class*="animatedContainer"], [class*="bannerImage"], [class*="bannerImg"]) ul:not(ul ul) {
   margin-top: -84px !important;
 }
 
@@ -736,6 +734,13 @@ html {
 [class*="sidebarList"] [aria-expanded] {
   color: var(--om-section) !important;
   font-weight: 700 !important;
+}
+
+/* The server name is a header, not a section label */
+[class*="sidebarList"] header [aria-expanded],
+[class*="sidebarList"] header [aria-expanded] * {
+  color: var(--om-fg) !important;
+  filter: none !important;
 }
 
 [class*="containerDefault"] [class*="selected"],
