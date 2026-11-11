@@ -409,6 +409,16 @@ html {
   font-size: 13px !important;
 }
 
+/* Both legacy full-page settings and the new settings dialog use fixed text
+   sizes, including on plain divs and spans. Scale their descendants as well. */
+:is([class*="standardSidebarView"], [class*="settings" i], [role="dialog"]) :where(*) {
+  font-size: 12.5px !important;
+}
+
+:is([class*="standardSidebarView"], [class*="settings" i], [role="dialog"]) :is(h1, h2, h3, h4, h5, h6, [class*="heading" i]) {
+  font-size: 14px !important;
+}
+
 [class*="messageContent"],
 [class*="markup_"],
 [class*="textArea"],
@@ -447,13 +457,8 @@ html {
   white-space: nowrap !important;
 }
 
-:root,
-.visual-refresh {
+[class*="messageListItem"] [class*="compact_"] {
   --custom-message-margin-compact-indent: 11ch !important;
-}
-
-[class*="messageListItem"] [class*="avatar_"] {
-  display: none !important;
 }
 
 /* Replies were sized for Discord's larger text */
@@ -711,7 +716,7 @@ html {
   pointer-events: none;
   opacity: 1 !important;
   transform: none !important;
-  background: color-mix(in srgb, var(--om-ok) 16%, transparent) !important;
+  background: var(--om-accent-soft) !important;
   border: 0 !important;
   corner-shape: var(--om-corner-shape, round);
   border-radius: var(--om-radius-small) !important;
@@ -725,7 +730,7 @@ html {
   content: "";
   width: 22px;
   height: 22px;
-  background: var(--om-ok);
+  background: var(--om-accent);
   /* A vector mask keeps folders legible with any configured monospace font. */
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
@@ -740,6 +745,14 @@ html {
 
 [class*="guilds_"] foreignObject > [class*="folderButtonInner"] {
   filter: none !important;
+}
+
+/* Expanded folders must follow the palette too, rather than Discord's saved
+   per-folder color. */
+[class*="guilds_"] [class*="folderGroupBackground"],
+[class*="guilds_"] [class*="expandedFolderBackground"] {
+  background: var(--om-surface) !important;
+  border-color: var(--om-line) !important;
 }
 
 /* Unread and selected markers: the rail's small bars, whatever they're called */

@@ -11,7 +11,7 @@ It restyles the app as a terminal session:
 
 - Framed panes with titles in their borders, and the active pane in your accent
 - Small monospace text, with IRC-style messages like `[18:02] <name> message`
-  (best with Discord's Compact message display)
+  (use Cozy message display to keep profile pictures visible)
 - Grayscale server icons and clean folder tiles
 - Corners that follow Hyprland’s size and chamfered shape, and your Omarchy font
 - Promo banners, Nitro buttons and server banners hidden
@@ -51,7 +51,8 @@ Remove it with `./uninstall.sh`.
 
 ## Tips
 
-- Set **Settings → Appearance → Message Display** to Compact.
+- Set **Settings → Appearance → Message Display** to Cozy for chat profile pictures.
+  Compact display omits avatars.
 - The message box has no emoji, GIF or sticker buttons. Press Enter to send and
   type `:name:` for emoji.
 
@@ -70,7 +71,6 @@ copies the result to Vesktop's themes folder, which Vesktop reloads live.
 ## Known limits
 
 - Tuned mainly on dark themes. Lupine is the only light theme tested.
-- Settings pages keep larger text.
 - Rows in long lists stay tall, because Discord positions them with fixed heights.
 - Colors come from each theme's roles, so some themes suit it better than others.
 
